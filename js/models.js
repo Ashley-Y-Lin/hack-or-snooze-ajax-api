@@ -66,6 +66,7 @@ class StoryList {
     return new StoryList(stories);
   }
 
+  //TODO:
   /** Adds story data to API, makes a Story instance, adds it to story list.
    * - user - the current instance of User who will post the story
    * - obj of {title, author, url}
@@ -78,14 +79,22 @@ class StoryList {
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "POST",
-      token: user.loginToken,
-      story: {
-        author: newStory.author,
-        title: newStory.title,
-        url: newStory.url
+      headers: {"Content-Type": "application/json"},
+      data: {
+        token: user.loginToken,
+        story: {
+          title: newStory.title,
+          author: newStory.author,
+          url: newStory.url
+        }
       }
     });
-    return response;
+
+    // { storyId, title, author, url, username, createdAt }
+    const currentStory = new Story(response.data.story)
+    storyList.stories.push(currentStory);
+
+    return currentStory;
   }
 }
 
