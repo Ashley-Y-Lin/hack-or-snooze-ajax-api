@@ -12,7 +12,7 @@ const $signupForm = $("#signup-form");
 
 const $addStoryForm = $("#add-story-form");
 const $navSubmit = $("#nav-submit");
-const $storyFormSubmit = $("#story-form-submit")
+const $storyFormSubmit = $("#story-form-submit");
 
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");

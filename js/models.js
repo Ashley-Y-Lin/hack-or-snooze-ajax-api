@@ -75,6 +75,7 @@ class StoryList {
    */
 
   async addStory(user, newStory) {
+    console.log('addStory==>', newStory);
     // UNIMPLEMENTED: complete this function!
     const response = await axios({
       url: `${BASE_URL}/stories`,
@@ -92,7 +93,9 @@ class StoryList {
 
     // { storyId, title, author, url, username, createdAt }
     const currentStory = new Story(response.data.story)
-    storyList.stories.push(currentStory);
+    console.log('currentStory ==>', currentStory);
+
+    this.stories.unshift(currentStory);
 
     return currentStory;
   }
