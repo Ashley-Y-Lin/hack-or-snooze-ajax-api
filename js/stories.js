@@ -50,3 +50,29 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/** Get data from the add new story form, calls .addStory method to create
+ * a new instance of Story, and put that story on the page */
+
+function grabAndShowStory(evt) {
+  evt.preventDefault();
+  $addStoryForm.toggle();
+
+  // grab the author, title, and url
+  const author = $("#author").val();
+  const title = $("#title").val();
+  const url = $("#url").val();
+
+  const storyInfo = {
+    title,
+    author,
+    url
+  }
+
+  const newStory = storyList.addStory(currentUser, storyInfo)
+  const $storyMarkup = generateStoryMarkup(newStory);
+  $allStoriesList.append($storyMarkup);
+  $allStoriesList.show();
+}
+
+$storyFormSubmit.on("click", grabAndShowStory);

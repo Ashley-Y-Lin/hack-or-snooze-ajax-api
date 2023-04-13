@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hack or Snooze</title>
-  <link rel="stylesheet" 
+  <link rel="stylesheet"
         href="https://www.unpkg.com/bootstrap-icons/font/bootstrap-icons.css">
   <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/user.css">
@@ -34,6 +34,14 @@
   <div class="navbar-brand">
     <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
   </div>
+  <div class="navbar-left">
+    <span> | </span>
+    <a class="nav-link" href="#" id="nav-submit">submit</a>
+    <span>| </span>
+    <a class="nav-link" href="#" id="nav-favorites">favorites</a>
+    <span>| </span>
+    <a class="nav-link" href="#" id="nav-stories">my stories</a>
+  </div>
   <div class="nav-right">
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
     <a class="nav-link" href="#" id="nav-user-profile"></a>
@@ -43,7 +51,7 @@
 
 
 
-<form action="" id="add-story-form" class="container-fluid" style="display: none;">
+<form action="" id="add-story-form" class="container-fluid hidden">
   <div class="row">
     <label for="author">Author</label>
     <input type="text" id="author" placeholder="author name">
@@ -56,6 +64,7 @@
     <label for="url">URL</label>
     <input type="text" id="url" placeholder="story url">
   </div>
+  <button class="btn btn-gray" id="story-form-submit">submit</button>
 </form>
 
 
