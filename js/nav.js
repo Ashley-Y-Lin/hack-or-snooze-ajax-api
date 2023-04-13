@@ -40,14 +40,15 @@ function updateNavOnLogin() {
 /** Displays add new story form when a user clicks the 'submit' navbar link */
 
 /**
- * Called when click on navbar link, cause new story form to appear on page  
+ * Called when click on navbar link, cause new story form to appear on page
  */
 
-function navSubmitLinkClick(evt){
-  console.log("the navSubmit link clicked, displays add story form")
+function navSubmitLinkClick(evt) {
+  console.log("the navSubmit link clicked, displays add story form");
   evt.preventDefault();
   $addStoryForm.toggle();
   hidePageComponents();
+  //TODO: instead just insert the one at the top
   putStoriesOnPage();
 }
 

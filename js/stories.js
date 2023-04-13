@@ -57,7 +57,6 @@ function putStoriesOnPage() {
 async function grabAndShowStory(evt) {
   evt.preventDefault();
   $addStoryForm.toggle();
-  console.log('submit form success');
 
   // grab the author, title, and url
   const title = $("#title").val();
@@ -68,12 +67,9 @@ async function grabAndShowStory(evt) {
     title,
     author,
     url
-  }
+  };
 
-  // console.log('storyInfo ==>', storyInfo);
-  // console.log('currentUser ==>', currentUser);
-
-  let newStory = await storyList.addStory(currentUser, storyInfo)
+  const newStory = await storyList.addStory(currentUser, storyInfo);
   console.log("newStory ==>", newStory);
 
   const $storyMarkup = generateStoryMarkup(newStory);
@@ -82,10 +78,6 @@ async function grabAndShowStory(evt) {
   $allStoriesList.prepend($storyMarkup);
 }
 
-// ON BUTTON IN THE FORM SUBMIT 
-$storyFormSubmit.on("submit", grabAndShowStory);
-
-// ON FORM SUBMIT
-// $addStoryForm.on("submit", grabAndShowStory);
+$storyFormSubmit.on("click", grabAndShowStory);
 
 

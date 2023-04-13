@@ -24,11 +24,13 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    const index = this.url.indexOf('/')+2
+    const hostname = this.url.slice(index, this.url.length-1)
+    //console.log("hostname", hostname)
+
+    return hostname;
   }
 }
-
 
 /******************************************************************************
  * List of Story instances: used by UI to show story lists in DOM.
@@ -66,7 +68,6 @@ class StoryList {
     return new StoryList(stories);
   }
 
-  //TODO:
   /** Adds story data to API, makes a Story instance, adds it to story list.
    * - user - the current instance of User who will post the story
    * - obj of {title, author, url}
@@ -76,11 +77,11 @@ class StoryList {
 
   async addStory(user, newStory) {
     console.log('addStory==>', newStory);
-    // UNIMPLEMENTED: complete this function!
+
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       data: {
         token: user.loginToken,
         story: {
@@ -91,16 +92,16 @@ class StoryList {
       }
     });
 
-    // { storyId, title, author, url, username, createdAt }
-    const currentStory = new Story(response.data.story)
+    const currentStory = new Story(response.data.story);
     console.log('currentStory ==>', currentStory);
 
     this.stories.unshift(currentStory);
+    //TODO: this.stories is all the stories, each user has an array of stories
+    // that they have written, which will also need to be updated
 
     return currentStory;
   }
 }
-
 
 /******************************************************************************
  * User: a user in the system (only used to represent the current user)
