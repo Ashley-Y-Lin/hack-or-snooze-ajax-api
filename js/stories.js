@@ -20,8 +20,9 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+  console.log("generateStoryMarkup", story);
 
+  //FIXME: dont hard code the star color
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
@@ -52,54 +53,6 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
-/** Get list of favorites from server, generates their HTML, and puts on page */
-
-function putFavoritesOnPage(){
-  console.log("putFavoritesOnPage runs")
-
-  $allStoriesList.empty();
-
-  // loop through all of our favorites and generate HTML
-  for (let story of currentUser.favorites){
-    console.log(story)
-    const $story = generateStoryMarkup(story);
-    $allStoriesList.append($story);
-  }
-
-  $allStoriesList.show();
-}
-
-$navFavorites.on("click", putFavoritesOnPage)
-
-//FIXME: the favorites tab doesn't update with the newly added stories
-
-/** Set event listener for clicking on a star, add the corresponding story
- * with the clicked star to the user's favorites list */
-
-$allStoriesList.on("click", ".story-star", async function(evt){
-  evt.preventDefault()
-  console.log("a star is clicked!")
-
-  let $storyMarkup = $(evt.target).closest("li")
-  console.log("$storyMarkup", $storyMarkup)
-
-  let $storyId = $storyMarkup[0].id
-  console.log("$storyId", $storyId)
-
-  let storyInstance = await axios({
-    url: `${BASE_URL}/stories/${$storyId}`,
-      method: "GET",
-      params: {
-        storyId: $storyId
-      }
-  })
-
-  await currentUser.addFavorite(storyInstance.data.story)
-
-  // maybe prepend the markup of the new fav story into the favorites
-})
-
-
 /** Get data from the add new story form, calls .addStory method to create
  * a new instance of Story, and put that story on the page */
 
@@ -119,14 +72,61 @@ async function grabAndShowStory(evt) {
   };
 
   const newStory = await storyList.addStory(currentUser, storyInfo);
-  console.log("newStory ==>", newStory);
+  //console.log("newStory ==>", newStory);
 
   const $storyMarkup = generateStoryMarkup(newStory);
-  console.log('storyMarkup ==>', $storyMarkup);
+  //console.log('storyMarkup ==>', $storyMarkup);
 
   $allStoriesList.prepend($storyMarkup);
 }
 
 $storyFormSubmit.on("click", grabAndShowStory);
 
+function putFavoritesOnPage() {
+  $allFavoritesList.empty()
 
+  for (let story of currentUser.favorites) {
+    const $storyMarkup = generateStoryMarkup(story);
+    $allFavoritesList.prepend($storyMarkup);
+  }
+
+  $allFavoritesList.show();
+}
+
+/** handle favorite and unfavorite of a story */
+
+// grab the id for the story
+// loop over the stories in user.favorites
+// check if any of the story ids are equal to the id you grabbed
+// if it is
+// call remove favorites
+// if not
+// call add favorites
+// toggle the star color
+
+async function toggleFavoriteStory(event) {
+  console.log("a star was clicked");
+
+  const $target = $(event.target);
+  const $closestLi = $target.closest("li");
+  const storyId = $closestLi.attr("id");
+
+  const storyInstance = await Story.getStory(storyId);
+  let isFavorite = false;
+
+  for (let story of currentUser.favorites) {
+    if (story.id === storyId) {
+      isFavorite = true;
+    }
+  }
+
+  if (isFavorite === true) {
+    await currentUser.removeFavorite(storyInstance);
+  } else {
+    await currentUser.addFavorite(storyInstance);
+  }
+
+  $target.toggleClass("bi-star bi-star-fill");
+}
+
+$(".stories-container").on("click", ".story-star", toggleFavoriteStory);

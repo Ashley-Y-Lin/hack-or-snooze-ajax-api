@@ -53,3 +53,13 @@ function navSubmitLinkClick(evt) {
 }
 
 $navSubmit.on("click", navSubmitLinkClick);
+
+/** Get list of favorites from server, generates their HTML, and puts on page */
+
+function navFavoriteClick() {
+  console.log("putFavoritesOnPage runs");
+  hidePageComponents();
+  putFavoritesOnPage();
+}
+
+$navFavorites.on("click", navFavoriteClick);

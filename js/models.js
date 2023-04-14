@@ -34,6 +34,15 @@ class Story {
 
     return hostname;
   }
+
+  static async getStory(storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "GET",
+    });
+
+    return new Story(response.data.story)
+  }
 }
 
 /******************************************************************************
@@ -147,8 +156,6 @@ class User {
     // axios call has suceeded
     // need error handling, check axios response, maybe try/catch
 
-    this.favorites.push(story);
-
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: "POST",
@@ -158,6 +165,8 @@ class User {
         storyId: story.storyId,
       }
     });
+
+    this.favorites.push(story);
   }
 
   /**
@@ -165,7 +174,6 @@ class User {
    */
 
   async removeFavorite(story) {
-    this.favorites.splice(this.favorites.indexOf(story), 1);
 
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
@@ -176,6 +184,8 @@ class User {
         storyId: this.storyId,
       }
     });
+
+    this.favorites.splice(this.favorites.indexOf(story), 1);
   }
 
   /** Register new user in API, make User instance & return it.
