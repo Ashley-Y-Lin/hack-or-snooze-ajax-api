@@ -25,6 +25,7 @@ function generateStoryMarkup(story) {
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+        <i class="bi bi-star story-star"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -50,6 +51,54 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/** Get list of favorites from server, generates their HTML, and puts on page */
+
+function putFavoritesOnPage(){
+  console.log("putFavoritesOnPage runs")
+
+  $allStoriesList.empty();
+
+  // loop through all of our favorites and generate HTML
+  for (let story of currentUser.favorites){
+    console.log(story)
+    const $story = generateStoryMarkup(story);
+    $allStoriesList.append($story);
+  }
+
+  $allStoriesList.show();
+}
+
+$navFavorites.on("click", putFavoritesOnPage)
+
+//FIXME: the favorites tab doesn't update with the newly added stories
+
+/** Set event listener for clicking on a star, add the corresponding story
+ * with the clicked star to the user's favorites list */
+
+$allStoriesList.on("click", ".story-star", async function(evt){
+  evt.preventDefault()
+  console.log("a star is clicked!")
+
+  let $storyMarkup = $(evt.target).closest("li")
+  console.log("$storyMarkup", $storyMarkup)
+
+  let $storyId = $storyMarkup[0].id
+  console.log("$storyId", $storyId)
+
+  let storyInstance = await axios({
+    url: `${BASE_URL}/stories/${$storyId}`,
+      method: "GET",
+      params: {
+        storyId: $storyId
+      }
+  })
+
+  await currentUser.addFavorite(storyInstance.data.story)
+
+  // maybe prepend the markup of the new fav story into the favorites
+})
+
 
 /** Get data from the add new story form, calls .addStory method to create
  * a new instance of Story, and put that story on the page */

@@ -24,13 +24,13 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    const startIndex = this.url.indexOf('/')+2;
+    const startIndex = this.url.indexOf('/') + 2;
     let hostname = this.url.slice(startIndex, this.url.length);
-    
+
     // if last index equal to forward slash
-    if(hostname.slice(-1) === '/') {
+    if (hostname.slice(-1) === '/') {
       hostname = this.url.slice(startIndex, this.url.length - 1);
-    } 
+    }
 
     return hostname;
   }
@@ -139,35 +139,43 @@ class User {
 
 
   /**
-   * Add story to user favorites, takes a story instance as input 
+   * Add story to user favorites, takes a story instance as input
    */
 
   async addFavorite(story) {
+    //TODO: you only want to push and slice from favorites if you know the
+    // axios call has suceeded
+    // need error handling, check axios response, maybe try/catch
+
     this.favorites.push(story);
 
-    const response = await axios({
-      url:`${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: "POST",
       data: {
         token: this.loginToken,
         username: this.username,
         storyId: story.storyId,
       }
-    }); 
+    });
   }
+
+  /**
+   * Remove story from user favorites, takes a story instance as input
+   */
 
   async removeFavorite(story) {
     this.favorites.splice(this.favorites.indexOf(story), 1);
 
-    const response = await axios({
-      url:`${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: "DELETE",
       data: {
         token: this.loginToken,
         username: this.username,
         storyId: this.storyId,
       }
-    })
+    });
   }
 
   /** Register new user in API, make User instance & return it.
