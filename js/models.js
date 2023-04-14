@@ -24,9 +24,13 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    const index = this.url.indexOf('/')+2
-    const hostname = this.url.slice(index, this.url.length-1)
-    //console.log("hostname", hostname)
+    const startIndex = this.url.indexOf('/')+2;
+    let hostname = this.url.slice(startIndex, this.url.length);
+    
+    // if last index equal to forward slash
+    if(hostname.slice(-1) === '/') {
+      hostname = this.url.slice(startIndex, this.url.length - 1);
+    } 
 
     return hostname;
   }
@@ -131,6 +135,39 @@ class User {
 
     // store the login token on the user so it's easy to find for API calls.
     this.loginToken = token;
+  }
+
+
+  /**
+   * Add story to user favorites, takes a story instance as input 
+   */
+
+  async addFavorite(story) {
+    this.favorites.push(story);
+
+    const response = await axios({
+      url:`${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "POST",
+      data: {
+        token: this.loginToken,
+        username: this.username,
+        storyId: story.storyId,
+      }
+    }); 
+  }
+
+  async removeFavorite(story) {
+    this.favorites.splice(this.favorites.indexOf(story), 1);
+
+    const response = await axios({
+      url:`${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "DELETE",
+      data: {
+        token: this.loginToken,
+        username: this.username,
+        storyId: this.storyId,
+      }
+    })
   }
 
   /** Register new user in API, make User instance & return it.

@@ -48,8 +48,8 @@ function navSubmitLinkClick(evt) {
   evt.preventDefault();
   $addStoryForm.toggle();
   hidePageComponents();
-  //TODO: instead just insert the one at the top
-  putStoriesOnPage();
+  $allStoriesList.show();
+
 }
 
 $navSubmit.on("click", navSubmitLinkClick);
