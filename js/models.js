@@ -19,7 +19,6 @@ class Story {
     this.url = url;
     this.username = username;
     this.createdAt = createdAt;
-    this.favoriteStarClass = "bi-star";
   }
 
   /** Parses hostname out of URL and returns it. */
@@ -42,7 +41,7 @@ class Story {
       method: "GET",
     });
 
-    return new Story(response.data.story)
+    return new Story(response.data.story);
   }
 }
 
@@ -147,6 +146,19 @@ class User {
     this.loginToken = token;
   }
 
+  /** Check if a story is one of the user's favorites
+   * Takes as input a story instance, returns true or false
+   */
+
+  isFavorite(story) {
+    //TODO: try sum at some point
+    for (let favStory of this.favorites) {
+      if (favStory.storyId === story.storyId) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * Add story to user favorites, takes a story instance as input

@@ -21,12 +21,11 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.log("generateStoryMarkup", story);
-
-  //FIXME: dont hard code the star color
   const hostName = story.getHostName();
+
   return $(`
       <li id="${story.storyId}">
-        <i class="bi ${story.favoriteStarClass} story-star"></i>
+        <i class="bi ${currentUser.isFavorite(story) ? "bi-star-fill" : "bi-star"} story-star"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -130,13 +129,6 @@ async function toggleFavoriteStory(event) {
   }
 
   $target.toggleClass("bi-star bi-star-fill");
-  
-  if (storyInstance.favoriteStarClass === "bi-star") {
-    storyInstance.favoriteStarClass = "bi-star-fill";
-  } else {
-    storyInstance.favoriteStarClass = "bi-star";
-  }
-
 }
 
 $(".stories-container").on("click", ".story-star", toggleFavoriteStory);
