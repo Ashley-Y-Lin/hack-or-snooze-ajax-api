@@ -20,13 +20,13 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  console.log("generateStoryMarkup", story);
+  // console.log("generateStoryMarkup", story);
 
   //FIXME: dont hard code the star color
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <i class="bi bi-star story-star"></i>
+        <i class="bi ${story.favoriteStarClass} story-star"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -115,18 +115,28 @@ async function toggleFavoriteStory(event) {
   let isFavorite = false;
 
   for (let story of currentUser.favorites) {
-    if (story.id === storyId) {
+    console.log('story ID==>', story.storyId);
+    // console.log('story.Id===>', story.id, 'storyId===>', storyId);
+    if (story.storyId === storyId) {
       isFavorite = true;
     }
   }
 
   if (isFavorite === true) {
+    console.log('is favorite is true');
     await currentUser.removeFavorite(storyInstance);
   } else {
     await currentUser.addFavorite(storyInstance);
   }
 
   $target.toggleClass("bi-star bi-star-fill");
+  
+  if (storyInstance.favoriteStarClass === "bi-star") {
+    storyInstance.favoriteStarClass = "bi-star-fill";
+  } else {
+    storyInstance.favoriteStarClass = "bi-star";
+  }
+
 }
 
 $(".stories-container").on("click", ".story-star", toggleFavoriteStory);
