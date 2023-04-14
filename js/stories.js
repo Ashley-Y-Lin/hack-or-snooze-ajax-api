@@ -22,10 +22,20 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.log("generateStoryMarkup", story);
   const hostName = story.getHostName();
+  let starType;
+  console.log('story ==>', story);
 
+  if (currentUser === undefined) {
+    starType = 'bi-star';
+  } else {
+    starType = currentUser.isFavorite(story) ? "bi-star-fill" : "bi-star"
+  }
+
+
+  // current user no log in value is undefined
   return $(`
       <li id="${story.storyId}">
-        <i class="bi ${currentUser.isFavorite(story) ? "bi-star-fill" : "bi-star"} story-star"></i>
+        <i class="bi ${starType} story-star"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -132,3 +142,16 @@ async function toggleFavoriteStory(event) {
 }
 
 $(".stories-container").on("click", ".story-star", toggleFavoriteStory);
+
+// putMyStoriesOnPage();
+
+function putMyStoriesOnPage() {
+  $allMyStoriesList.empty()
+
+  for (let story of currentUser.ownStories) {
+    const $storyMarkup = generateStoryMarkup(story);
+    $allMyStoriesList.prepend($storyMarkup);
+  }
+
+  $allMyStoriesList.show();
+}

@@ -63,3 +63,15 @@ function navFavoriteClick() {
 }
 
 $navFavorites.on("click", navFavoriteClick);
+
+// need a function my stores and a click
+  // displays all stories that currentUser has submmitted 
+
+function navMyStoriesClick() {
+  console.log('my stories nav was clicked');
+
+  hidePageComponents();
+  putMyStoriesOnPage();
+}
+
+$navMyStories.on('click', navMyStoriesClick);
